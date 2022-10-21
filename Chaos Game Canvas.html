@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Canvas</title>
+        <style></style>
+    </head>
+    <body>
+        <canvas
+            height="1000px"
+            width="1000px"
+            id="canvas"
+            style="border: 1px solid #000000"
+        ></canvas>
+    </body>
+    <script>
+        // Varibles
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        let lastRenderTime = 0;
+
+        var activePointStart = 1;
+        var points = [];
+        var activePoint = [500, 110];
+        var midpoint = [0, 0];
+        var pointA = [10, 990];
+        var pointB = [500, 10];
+        var pointC = [990, 990];
+
+        //Updating frames
+        function main(currentTime) {
+            window.requestAnimationFrame(main);
+            const secondsSinceLastRender =
+                (currentTime - lastRenderTime) / 1000;
+            if (secondsSinceLastRender < 1 / 120) return;
+
+            lastRenderTime = currentTime;
+
+            midPoint();
+            draw();
+        }
+
+        function midPoint() {
+            if (activePointStart == 0) {
+                midpoint[0] = (pointA[0] + activePoint[0]) / 2;
+                midpoint[1] = (pointA[1] + activePoint[1]) / 2;
+                points.push(activePoint);
+                activePoint = [midpoint[0], midpoint[1]];
+                points.push(activePoint);
+                activePointStart = Math.floor(Math.random() * 3);
+                return;
+            } else if (activePointStart == 1) {
+                midpoint[0] = (pointB[0] + activePoint[0]) / 2;
+                midpoint[1] = (pointB[1] + activePoint[1]) / 2;
+                points.push(activePoint);
+                activePoint = [midpoint[0], midpoint[1]];
+                points.push(activePoint);
+                activePointStart = Math.floor(Math.random() * 3);
+                return;
+            } else if (activePointStart == 2) {
+                midpoint[0] = (pointC[0] + activePoint[0]) / 2;
+                midpoint[1] = (pointC[1] + activePoint[1]) / 2;
+                points.push(activePoint);
+                activePoint = [midpoint[0], midpoint[1]];
+                points.push(activePoint);
+                activePointStart = Math.floor(Math.random() * 3);
+                return;
+            }
+        }
+
+        //Drawing Function
+        function draw() {
+            //Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            //Point A
+            ctx.fillRect(pointA[0], pointA[1], 1, 1);
+            //Point B
+            ctx.fillRect(pointB[0], pointB[1], 1, 1);
+            //Point C
+            ctx.fillRect(pointC[0], pointC[1], 1, 1);
+
+            drawPoints();
+        }
+
+        //Draw all points in array points
+        function drawPoints() {
+            for (let i = 0; i < points.length; i++) {
+                ctx.fillRect(points[i][0], points[i][1], 1, 1);
+            }
+        }
+
+        window.requestAnimationFrame(main);
+    </script>
+</html>
